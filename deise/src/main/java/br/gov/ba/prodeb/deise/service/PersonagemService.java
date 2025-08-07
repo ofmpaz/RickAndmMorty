@@ -1,25 +1,24 @@
 package br.gov.ba.prodeb.deise.service;
 
-import br.gov.ba.prodeb.deise.client.PersonagemClient;
+import br.gov.ba.prodeb.deise.client.RickAndMortyClient;
+import br.gov.ba.prodeb.deise.dto.EpisodeDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemResponseDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PersonagemService {
 
-    private PersonagemClient personagemClient;
+    private RickAndMortyClient personagemClient;
 
-    public PersonagemService(PersonagemClient personagemClient) {
+    public PersonagemService(RickAndMortyClient personagemClient) {
         this.personagemClient = personagemClient;
     }
 
-    public PersonagemResponseDTO obterTodos() {
-        return personagemClient.obterTodos();
+    public PersonagemResponseDTO obterTodos(int page) {
+        return personagemClient.obterTodos(page);
     }
 
     public PersonagemDTO buscarPorId(int id) {
@@ -32,5 +31,13 @@ public class PersonagemService {
 
     public PersonagemResponseDTO filtrar(String name) {
         return personagemClient.filtrar(name);
+    }
+
+    public EpisodeDTO buscarEpsodios(int id) {
+        return personagemClient.listaDeEp(id);
+    }
+
+    public EpisodeDTO buscarMultiplosEpsodios(String episode) {
+        return personagemClient.buscarMultiplosEpsodios(episode);
     }
 }
