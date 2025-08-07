@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PersonagemService {
+public class RickAndMortyService {
 
     private RickAndMortyClient personagemClient;
 
-    public PersonagemService(RickAndMortyClient personagemClient) {
+    public RickAndMortyService(RickAndMortyClient personagemClient) {
         this.personagemClient = personagemClient;
     }
 
@@ -29,15 +29,15 @@ public class PersonagemService {
        return personagemClient.obterMultiplosIds(ids);
     }
 
-    public PersonagemResponseDTO filtrar(String name) {
-        return personagemClient.filtrar(name);
+    public PersonagemResponseDTO filtrar(String name, String status) {
+        return personagemClient.filtrar(name, status);
     }
 
-    public EpisodeDTO buscarEpsodios(int id) {
+    public EpisodeDTO buscarPorEpisdio(int id) {
         return personagemClient.listaDeEp(id);
     }
 
-    public EpisodeDTO buscarMultiplosEpsodios(String episode) {
+    public EpisodeDTO buscarMultiplosepisdioPorId(String episode) {
         return personagemClient.buscarMultiplosEpsodios(episode);
     }
 }

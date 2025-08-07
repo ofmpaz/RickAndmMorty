@@ -1,9 +1,8 @@
 package br.gov.ba.prodeb.deise.controller;
 
-import br.gov.ba.prodeb.deise.dto.EpisodeDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemResponseDTO;
-import br.gov.ba.prodeb.deise.service.PersonagemService;
+import br.gov.ba.prodeb.deise.service.RickAndMortyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,36 +14,28 @@ import java.util.List;
 public class PersonagemController {
 
     @Autowired
-    private PersonagemService personagemService;
+    private RickAndMortyService rickAndMortyService;
 
     @GetMapping
     public ResponseEntity<PersonagemResponseDTO> obterTodos(@RequestParam(required = false, defaultValue = "1") int page) {
-        return ResponseEntity.ok(personagemService.obterTodos(page));
+        return ResponseEntity.ok(rickAndMortyService.obterTodos(page));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PersonagemDTO> obterPorId(@PathVariable int id) {
-        return ResponseEntity.ok(personagemService.buscarPorId(id));
+        return ResponseEntity.ok(rickAndMortyService.buscarPorId(id));
     }
 
     @GetMapping("/multiplos/{ids}")
     public ResponseEntity<List<PersonagemDTO>> obterMultiplosIds(@PathVariable String ids) {
-       return ResponseEntity.ok(personagemService.obterMultiplosIds(ids));
-
+        return ResponseEntity.ok(rickAndMortyService.obterMultiplosIds(ids));
     }
 
-    @GetMapping("/filtrar")
-    public ResponseEntity<PersonagemResponseDTO> filtrar(@RequestParam String name) {
-        return ResponseEntity.ok(personagemService.filtrar(name));
+    @GetMapping("/filtrar-nome-status")
+    public ResponseEntity<PersonagemResponseDTO> filtrar(@RequestParam String name,
+                                                         @RequestParam (required = false, defaultValue = "alive")
+                                                         String status) {
+        return ResponseEntity.ok(rickAndMortyService.filtrar(name, status));
     }
 
-    @GetMapping("/epsodios/{id}")
-    public ResponseEntity<EpisodeDTO> epsodiosComPersonagem(@PathVariable int id) {
-        return ResponseEntity.ok(personagemService.buscarEpsodios(id));
-    }
-
-    @GetMapping("/multiplos-epsodios")
-    public ResponseEntity<EpisodeDTO> buscarMultiplosEpsodios(@RequestParam String episode) {
-        return ResponseEntity.ok(personagemService.buscarMultiplosEpsodios(episode));
-    }
 }
