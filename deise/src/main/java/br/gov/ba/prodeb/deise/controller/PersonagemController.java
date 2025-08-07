@@ -22,7 +22,7 @@ public class PersonagemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonagemDTO> obterPorId(@PathVariable int id) {
+    public ResponseEntity<PersonagemDTO> obterPorId(@PathVariable String id) {
         return ResponseEntity.ok(rickAndMortyService.buscarPorId(id));
     }
 

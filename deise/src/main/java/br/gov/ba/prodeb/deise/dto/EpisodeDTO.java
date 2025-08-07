@@ -13,7 +13,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EpisodeDTO {
 
-    private int id;
+    private String id;
     private String name;
     private String episode;
 }

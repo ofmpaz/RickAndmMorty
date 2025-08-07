@@ -13,9 +13,16 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonagemDTO {
 
-    private int id;
+    private String id;
+    private String personagemId;
     private String name;
     private String status;
     private String species;
 
+    public PersonagemDTO(String personagemId, String name, String status, String species) {
+        this.personagemId = personagemId;
+        this.name = name;
+        this.status = status;
+        this.species = species;
+    }
 }

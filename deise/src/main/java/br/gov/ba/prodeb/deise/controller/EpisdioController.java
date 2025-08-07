@@ -6,20 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/episdio")
+@RequestMapping("/api/episodio")
 public class EpisdioController {
 
     @Autowired
     private RickAndMortyService rickAndMortyService;
 
-    @GetMapping("/episodios/{id}")
-    public ResponseEntity<EpisodeDTO> episodiosComPersonagem(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<EpisodeDTO> episodiosComPersonagem(@PathVariable String id) {
         return ResponseEntity.ok(rickAndMortyService.buscarPorEpisdio(id));
     }
 
-    @GetMapping("/multiplos-episodios")
-    public ResponseEntity<EpisodeDTO> buscarMultiplosEpsodios(@RequestParam String episode) {
-        return ResponseEntity.ok(rickAndMortyService.buscarMultiplosepisdioPorId(episode));
+    @GetMapping("/multiplos/{ids}")
+    public ResponseEntity<List<EpisodeDTO>> buscarEpMultiplos(@PathVariable("ids") String ids) {
+        return ResponseEntity.ok(rickAndMortyService.buscarEpMultiplos(ids));
     }
 }
