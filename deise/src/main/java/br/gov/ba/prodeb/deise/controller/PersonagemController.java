@@ -31,11 +31,20 @@ public class PersonagemController {
         return ResponseEntity.ok(rickAndMortyService.obterMultiplosIds(ids));
     }
 
-    @GetMapping("/filtrar-nome-status")
+    @GetMapping("/filtrar")
     public ResponseEntity<PersonagemResponseDTO> filtrar(@RequestParam String name,
                                                          @RequestParam (required = false, defaultValue = "alive")
                                                          String status) {
         return ResponseEntity.ok(rickAndMortyService.filtrar(name, status));
     }
 
+    @GetMapping("/buscar-por-status")
+    public ResponseEntity<PersonagemResponseDTO> buscarPersonagemPorStatus(@RequestParam String status){
+        return ResponseEntity.ok(rickAndMortyService.filtrar(null, status));
+    }
+
+    @GetMapping("/quantidade-por-status")
+    public ResponseEntity<PersonagemResponseDTO> contarPersonagemPorStatus(@RequestParam String status) {
+        return ResponseEntity.ok(rickAndMortyService.filtrar(null, status));
+    }
 }

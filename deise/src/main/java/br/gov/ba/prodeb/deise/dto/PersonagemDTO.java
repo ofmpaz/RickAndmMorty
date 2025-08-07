@@ -14,15 +14,13 @@ import lombok.Setter;
 public class PersonagemDTO {
 
     private String id;
-    private String personagemId;
     private String name;
     private String status;
     private String species;
 
-    public PersonagemDTO(String personagemId, String name, String status, String species) {
-        this.personagemId = personagemId;
+    /*public PersonagemDTO( String name, String status, String species) {
         this.name = name;
         this.status = status;
         this.species = species;
-    }
+    }*/
 }

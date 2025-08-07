@@ -25,7 +25,7 @@ public class Personagem {
     }
 
     public PersonagemDTO toDTO() {
-        return new PersonagemDTO(id, personagemId, name, status, species);
+        return new PersonagemDTO(id, name, status, species);
     }
 
 

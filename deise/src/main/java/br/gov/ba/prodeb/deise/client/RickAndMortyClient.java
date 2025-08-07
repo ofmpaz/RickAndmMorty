@@ -23,7 +23,11 @@ public interface RickAndMortyClient {
     List<PersonagemDTO> obterMultiplosIds(@PathVariable("ids") String ids);
 
     @GetMapping("/api/character")
-    PersonagemResponseDTO filtrar(@RequestParam String name, @RequestParam String status);
+    PersonagemResponseDTO filtrar(@RequestParam (required = false, defaultValue = "null") String parametroUm,
+                                  @RequestParam  String parametroDois);
+
+    @GetMapping("/api/character")
+    PersonagemDTO obterPorEspecie(@RequestParam String species);
 
     @GetMapping("/api/episode/{id}")
     EpisodeDTO listaDeEp(@PathVariable String id);
