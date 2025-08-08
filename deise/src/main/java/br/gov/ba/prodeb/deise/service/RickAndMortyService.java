@@ -12,16 +12,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 @Service
 public class RickAndMortyService {
 
     @Autowired
     private RickAndMortyClient personagemClient;
+
     @Autowired
     private PersonagemRepository personagemRepository;
+
+
+    private final String CACHE_KEY = "personagem:id:";
 
     public PersonagemResponseDTO obterTodos(int page) {
         return personagemClient.obterTodos(page);
@@ -35,29 +37,40 @@ public class RickAndMortyService {
     }*/
 
     public PersonagemDTO buscarPorId(String id) {
-        Optional<Personagem> personagemCache = personagemRepository.findFirstByPersonagemId(id);
-        if (personagemCache.isPresent()) {
-            PersonagemDTO personagemDTO = new PersonagemDTO();
-            return personagemCache.get().toDTO();
-        }
         PersonagemDTO dto = personagemClient.obterPeloId(Integer.parseInt(id));
         Personagem personagem = new Personagem(dto);
         personagemRepository.save(personagem);
         return dto;
     }
+    //Funcional
+    /*public PersonagemDTO buscarPorId(String id) {
+        String cacheKey = CACHE_KEY + id;
+        PersonagemDTO personagemCache = (PersonagemDTO) cacheService.buscarCache(cacheKey);
 
+        if(personagemCache == null) {
+            personagemCache = personagemClient.obterPeloId(Integer.parseInt(id));
+            cacheService.salvarCache(cacheKey, personagemCache);
+        }
+
+        return personagemCache;
+    }*/
+
+    //Funcional
     public List<PersonagemDTO> obterMultiplosIds(String ids) {
         return personagemClient.obterMultiplosIds(ids);
     }
 
+    //Funcional
     public PersonagemResponseDTO filtrar(String name, String status) {
         return personagemClient.filtrar(name, status);
     }
 
+    //Funcional
     public EpisodeDTO buscarPorEpisdio(String id) {
         return personagemClient.listaDeEp(id);
     }
 
+    //Funcional
     public List<EpisodeDTO> buscarEpMultiplos(String ids) {
         return personagemClient.buscarEpMultiplos(ids);
     }
