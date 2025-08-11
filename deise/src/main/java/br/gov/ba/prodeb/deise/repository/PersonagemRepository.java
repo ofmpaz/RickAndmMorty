@@ -9,12 +9,12 @@ import java.util.Optional;
 
 public interface PersonagemRepository extends MongoRepository<Personagem, String> {
 
-    Optional<Personagem> findFirstByPersonagemId(String id);
+    Personagem findFirstByPersonagemId(String id);
 
     List<Personagem> findByStatus(String status);
 
     long countByStatus(String status);
 
-    List<Personagem> findBySpecies(String id);
+    List<Personagem> findBySpecies(String species);
 
 }

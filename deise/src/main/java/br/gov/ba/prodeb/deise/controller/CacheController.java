@@ -28,8 +28,9 @@ public class CacheController {
          }
     }
 
-    @PostMapping("/salvar-cache/{id}")
-    public ResponseEntity<String> salvarCache(@PathVariable String id) {
-        return ResponseEntity.ok(cacheService.salvaCache(id));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPorId(@PathVariable String id) {
+         ResponseEntity.noContent();
+        return null;
     }
 }

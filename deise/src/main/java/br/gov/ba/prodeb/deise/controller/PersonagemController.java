@@ -32,19 +32,20 @@ public class PersonagemController {
     }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<PersonagemResponseDTO> filtrar(@RequestParam String name,
-                                                         @RequestParam (required = false, defaultValue = "alive")
-                                                         String status) {
-        return ResponseEntity.ok(rickAndMortyService.filtrar(name, status));
+    public ResponseEntity<PersonagemResponseDTO> filtrar(@RequestParam (required = false) String name,
+                                                         @RequestParam (required = false, defaultValue = "alive") String status,
+                                                         @RequestParam (required = false) String species) {
+        return ResponseEntity.ok(rickAndMortyService.filtrar(name, status, species));
     }
 
-    @GetMapping("/buscar-por-status")
-    public ResponseEntity<PersonagemResponseDTO> buscarPersonagemPorStatus(@RequestParam String status){
-        return ResponseEntity.ok(rickAndMortyService.filtrar(null, status));
-    }
-
-    @GetMapping("/quantidade-por-status")
-    public ResponseEntity<PersonagemResponseDTO> contarPersonagemPorStatus(@RequestParam String status) {
-        return ResponseEntity.ok(rickAndMortyService.filtrar(null, status));
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<PersonagemDTO> atualizar(@PathVariable String id, @RequestBody PersonagemDTO dto) {
+        PersonagemDTO personagemAtualizado = rickAndMortyService.atualizar(
+                id,
+                dto.getName(),
+                dto.getStatus(),
+                dto.getSpecies()
+        );
+        return ResponseEntity.ok(personagemAtualizado);
     }
 }

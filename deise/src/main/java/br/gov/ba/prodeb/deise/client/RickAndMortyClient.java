@@ -1,6 +1,5 @@
 package br.gov.ba.prodeb.deise.client;
 
-import br.gov.ba.prodeb.deise.dto.EpisodeDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -23,15 +22,9 @@ public interface RickAndMortyClient {
     List<PersonagemDTO> obterMultiplosIds(@PathVariable("ids") String ids);
 
     @GetMapping("/api/character")
-    PersonagemResponseDTO filtrar(@RequestParam (required = false, defaultValue = "null") String parametroUm,
-                                  @RequestParam  String parametroDois);
-
-    @GetMapping("/api/character")
-    PersonagemDTO obterPorEspecie(@RequestParam String species);
-
-    @GetMapping("/api/episode/{id}")
-    EpisodeDTO listaDeEp(@PathVariable String id);
-
-    @GetMapping("/api/episode/{ids}")
-    List<EpisodeDTO> buscarEpMultiplos(@PathVariable("ids") String ids);
+    PersonagemResponseDTO filtrar(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "species", required = false) String species
+    );
 }

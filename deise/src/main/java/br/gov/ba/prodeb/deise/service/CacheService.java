@@ -13,8 +13,6 @@ public class CacheService {
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    RickAndMortyService rickAndMortyService;
 
     private final String CACHE_KEY = "personagem:id:";
 
@@ -38,7 +36,7 @@ public class CacheService {
         return false;
     }
 
-    public String salvaCache(String id) {
+    /*public String salvaCache(String id) {
         String cacheKey = CACHE_KEY + id;
         PersonagemDTO personagemCache = rickAndMortyService.buscarPorId(id);
         if (personagemCache != null) {
@@ -46,5 +44,5 @@ public class CacheService {
             return cacheKey;
         }
         return "Usuário não existe na API";
-    }
+    }*/
 }

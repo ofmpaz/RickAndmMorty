@@ -1,17 +1,18 @@
 package br.gov.ba.prodeb.deise.service;
 
 import br.gov.ba.prodeb.deise.client.RickAndMortyClient;
-import br.gov.ba.prodeb.deise.dto.EpisodeDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemDTO;
 import br.gov.ba.prodeb.deise.dto.PersonagemResponseDTO;
 import br.gov.ba.prodeb.deise.entity.Personagem;
 import br.gov.ba.prodeb.deise.mapper.PersonagemMapper;
 import br.gov.ba.prodeb.deise.repository.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RickAndMortyService {
@@ -22,84 +23,78 @@ public class RickAndMortyService {
     @Autowired
     private PersonagemRepository personagemRepository;
 
+    @Autowired
+    CacheService cacheService;
 
     private final String CACHE_KEY = "personagem:id:";
 
-    public PersonagemResponseDTO obterTodos(int page) {
-        return personagemClient.obterTodos(page);
-    }
-
-    /*public PersonagemDTO buscarPorId(int id) {
-        PersonagemDTO dto = personagemClient.obterPeloId(id);
-        Personagem personagem = new Personagem(dto);
-        personagemRepository.save(personagem);
-        return dto;
-    }*/
-
     public PersonagemDTO buscarPorId(String id) {
-        PersonagemDTO dto = personagemClient.obterPeloId(Integer.parseInt(id));
-        Personagem personagem = new Personagem(dto);
-        personagemRepository.save(personagem);
-        return dto;
-    }
-    //Funcional
-    /*public PersonagemDTO buscarPorId(String id) {
         String cacheKey = CACHE_KEY + id;
         PersonagemDTO personagemCache = (PersonagemDTO) cacheService.buscarCache(cacheKey);
 
-        if(personagemCache == null) {
+        if (personagemCache == null) {
             personagemCache = personagemClient.obterPeloId(Integer.parseInt(id));
             cacheService.salvarCache(cacheKey, personagemCache);
         }
 
         return personagemCache;
-    }*/
+    }
 
-    //Funcional
+    public PersonagemResponseDTO obterTodos(int page) {
+        return personagemClient.obterTodos(page);
+    }
+
     public List<PersonagemDTO> obterMultiplosIds(String ids) {
-        return personagemClient.obterMultiplosIds(ids);
-    }
+        List<PersonagemDTO> personagensApi = personagemClient.obterMultiplosIds(ids);
 
-    //Funcional
-    public PersonagemResponseDTO filtrar(String name, String status) {
-        return personagemClient.filtrar(name, status);
-    }
-
-    //Funcional
-    public EpisodeDTO buscarPorEpisdio(String id) {
-        return personagemClient.listaDeEp(id);
-    }
-
-    //Funcional
-    public List<EpisodeDTO> buscarEpMultiplos(String ids) {
-        return personagemClient.buscarEpMultiplos(ids);
-    }
-
-    /*public PersonagemResponseDTO filtrarPersonagensPorStatus(String status) {
-        List<Personagem> personagemCache = personagemRepository.findByStatus(status);
-
-        if (personagemCache != null && !personagemCache.isEmpty()) {
-            List<PersonagemDTO> dtos = personagemCache.stream()
-                    .map(PersonagemMapper::toDto)
-                    .toList();
-            return new PersonagemResponseDTO(dtos);
+        if (personagensApi == null || personagensApi.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum personagem encontrado para os IDs fornecidos.");
         }
 
-        List<Personagem> personagemApi = personagemRepository.findByStatus(status);
+        List<Personagem> entidades = personagensApi.stream()
+                .map(PersonagemMapper::toEntity)
+                .collect(Collectors.toList());
 
-       List<PersonagemDTO personagemApi = personagemClient.filtrarPersonagensPorStatus(status);
+        personagemRepository.saveAll(entidades);
 
-    }*/
+        return personagensApi;
+    }
 
-    //Novo para trazer por (Pegar o long em um campo)
-    public long contarPorStatus(String status) {
-        return personagemRepository.countByStatus(status);
+    public PersonagemResponseDTO filtrar(String name, String status, String species) {
+        return personagemClient.filtrar(name, status, species);
     }
 
     public List<PersonagemDTO> buscarPorEspecie(String especie) {
-        List<Personagem> personagemEntidade = personagemRepository.findBySpecies(especie);
-        return personagemEntidade.stream()
-                .map(PersonagemMapper::toDto)
-                .toList();
+        List<PersonagemDTO> personagensDaApi = personagemClient.filtrar(null, null, especie).getResults();
+
+        List<Personagem> entidades = personagensDaApi.stream()
+                .map(PersonagemMapper::toEntity)
+                .collect(Collectors.toList());
+
+        personagemRepository.saveAll(entidades);
+
+        return personagensDaApi;
     }
+
+    public PersonagemDTO atualizar(String id, String nome, String status, String especie) {
+        Personagem personagem = personagemRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personagem não encontrado."));
+
+        if (nome != null) {
+            personagem.setName(nome);
+        }
+        if (status != null) {
+            personagem.setStatus(status);
+        }
+        if(especie != null) {
+            personagem.setSpecies(especie);
+        }
+        
+        Personagem personagemAtualizado = personagemRepository.save(personagem);
+        return personagemAtualizado.toDTO();
+    }
+
+
+
+
 }

@@ -8,7 +8,7 @@ public class PersonagemMapper {
     public static Personagem toEntity(PersonagemDTO dto) {
         Personagem personagem = new Personagem();
         personagem.setPersonagemId(dto.getId());
-        personagem.setName(dto.getStatus());
+        personagem.setName(dto.getName());
         personagem.setSpecies(dto.getSpecies());
         personagem.setStatus(dto.getStatus());
         return personagem;

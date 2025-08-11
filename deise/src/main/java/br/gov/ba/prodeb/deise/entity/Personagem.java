@@ -28,7 +28,6 @@ public class Personagem {
         return new PersonagemDTO(id, name, status, species);
     }
 
-
     @Id
     private String id;
     private String personagemId;
